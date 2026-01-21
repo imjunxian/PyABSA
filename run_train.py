@@ -2,13 +2,10 @@
 import os
 import sys
 
-# ✅ FIX 1: Remove "multiprocessing" imports and set_start_method.
-# These cause "Bus Errors" on macOS when combined with PyTorch DataLoaders.
-
-# Optimization flags for CPU training
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+# --- REMOVED CPU OPTIMIZATIONS ---
+# os.environ["OMP_NUM_THREADS"] = "1"
+# os.environ["MKL_NUM_THREADS"] = "1"
+# os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 from pyabsa.tasks.AspectCategoryRatingPair.configuration.configuration import T5ConfigManager
 from pyabsa.tasks.AspectCategoryRatingPair.trainer.trainer import T5Trainer
@@ -22,8 +19,8 @@ def _first_existing(*paths):
 def main():
     config = T5ConfigManager.get_t5_config_template()
 
-    # ✅ Force CPU to avoid Metal/MPS instability
-    config.device = "cpu"
+    # ✅ CHANGE 1: Set device to cuda
+    config.device = "cuda"
 
     base_path = os.getcwd()
 
@@ -58,7 +55,10 @@ def main():
     config.model_name_or_path = "google/flan-t5-base"
     config.max_source_length = 512
     config.max_target_length = 64
-    config.batch_size = 2  # Keep small for CPU
+    
+    # ✅ CHANGE 2: Increase batch size for GPU efficiency (try 8, 16, or 32)
+    config.batch_size = 16 
+    
     config.num_epoch = 10
     config.learning_rate = 3e-4
     config.output_dir = "checkpoints"

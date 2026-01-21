@@ -33,7 +33,7 @@ class T5TrainingInstructor:
         # ✅ CRITICAL FIX: num_workers=0 and pin_memory=False to prevent Bus Error
         self.train_dataloader = DataLoader(
             train_set, batch_size=self.config.batch_size, shuffle=True, 
-            num_workers=0, pin_memory=False
+            num_workers=4, pin_memory=True  # Changed from 0 and False
         )
         self.valid_dataloader = DataLoader(
             valid_set, batch_size=self.config.batch_size, shuffle=False, 

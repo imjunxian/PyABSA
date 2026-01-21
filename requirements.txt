@@ -17,7 +17,7 @@ sentencepiece
 pandas
 gensim
 pyabsa[dev]
-git+https://github.com/yangheng95/TextAttack
+git+https://github.com/QData/TextAttack.git
 nlpaug
 arxiv
 tokenizers

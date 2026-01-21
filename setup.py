@@ -64,10 +64,10 @@ setup(
     "aspect polarity classification (APC), and text classification (TC).",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yangheng95/PyABSA",
+    url="https://github.com/imjunxian/PyABSA",
     # Author details
-    author="Yang, Heng",
-    author_email="hy345@exeter.ac.uk",
+    author="Jun Xian Lee",
+    author_email="xxx",
     python_requires="<3.11, >=3.10",
     packages=find_packages(),
     include_package_data=True,

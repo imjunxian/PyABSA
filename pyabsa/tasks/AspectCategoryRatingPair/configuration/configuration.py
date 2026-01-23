@@ -14,9 +14,9 @@ Rating scale:
 
 Rules:
 - Output MUST contain exactly 3 pairs in this exact order: food, service, atmosphere.
-- Output format MUST be exactly: <food, X>, <service, Y>, <atmosphere, Z>
-- Use ONLY integers 1-5. No extra text. No explanations.
-- If an aspect is not mentioned, infer from the overall sentiment; if truly unclear, use 3.
+- Output format MUST be exactly: (food, X), (service, Y), (atmosphere, Z) where X,Y,Z are integers only in rating scale 1 to 5
+- Use ONLY integers 1 to 5. No extra text. No explanations.
+- If an aspect is not mentioned, infer from the overall sentiment then match it back to the rating scale; if truly unclear, use 3.
 
 Review:
 {REVIEW_TEXT}

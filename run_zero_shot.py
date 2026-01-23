@@ -17,19 +17,22 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 # ---------------------------------------------------------
 # 📝 CONFIGURATION
 # ---------------------------------------------------------
-MODEL_NAME = "google/flan-t5-base"
+MODEL_NAME = "google/flan-t5-small"
 
-PROMPT_TEMPLATE = """Task: Extract ratings (1-5) for food, service, and atmosphere.
+PROMPT_TEMPLATE = """Task: Rate restaurant aspects (food, service, atmosphere) from 1 to 5.
+Format: (food, X), (service, Y), (atmosphere, Z)
 
-Input Review:
-"{REVIEW_TEXT}"
+Review: The pasta was delicious, but the waiter ignored us all night. The music was also way too loud.
+Output: (food, 5), (service, 1), (atmosphere, 2)
 
-Constraints:
-1. Output format MUST be: <food, X>, <service, Y>, <atmosphere, Z>
-2. If an aspect is missing, infer it or use 3.
-3. Output NOTHING else.
+Review: Great staff and very cozy place. The food was okay but nothing special.
+Output: (food, 3), (service, 5), (atmosphere, 4)
 
-Response:
+Review: Everything was terrible. Dirty tables and bland food.
+Output: (food, 1), (service, 1), (atmosphere, 1)
+
+Review: {REVIEW_TEXT}
+Output:
 """
 
 def clean_output(text):
@@ -96,8 +99,10 @@ def main():
             outputs = model.generate(
                 **inputs, 
                 max_length=64,
-                num_beams=1, 
-                do_sample=False
+                num_beams=5,             # Explores more possibilities for the sequence
+                length_penalty=0.6,      # Encourages concise, structured output
+                repetition_penalty=1.5,  # Prevents it from just repeating "3, 3, 3"
+                early_stopping=True
             )
 
         # 4. Decode

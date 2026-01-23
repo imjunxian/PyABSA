@@ -1,6 +1,7 @@
 # run_train.py
 import os
 import sys
+import torch
 
 # --- REMOVED CPU OPTIMIZATIONS ---
 # os.environ["OMP_NUM_THREADS"] = "1"
@@ -19,23 +20,28 @@ def _first_existing(*paths):
 def main():
     config = T5ConfigManager.get_t5_config_template()
 
-    # ✅ CHANGE 1: Set device to cuda
-    config.device = "cuda"
+    # Force CUDA check
+    if torch.cuda.is_available():
+        config.device = "cuda"
+        print(f"🚀 CUDA is available. Using: {torch.cuda.get_device_name(0)}")
+    else:
+        config.device = "cpu"
+        print("⚠️ CUDA not found, falling back to CPU.")
 
     base_path = os.getcwd()
 
     # Locate datasets
     train_file = _first_existing(
-        os.path.join(base_path, "datasets", "train.json"),
-        os.path.join(base_path, "pyabsa", "datasets", "train.json"),
+        # os.path.join(base_path, "datasets_v1", "train.json"),
+        os.path.join(base_path, "pyabsa", "datasets_v1", "train.json"),
     )
     valid_file = _first_existing(
-        os.path.join(base_path, "datasets", "valid.json"),
-        os.path.join(base_path, "pyabsa", "datasets", "valid.json"),
+        # os.path.join(base_path, "datasets", "valid.json"),
+        os.path.join(base_path, "pyabsa", "datasets_v1", "valid.json"),
     )
     test_file = _first_existing(
-        os.path.join(base_path, "datasets", "test.json"),
-        os.path.join(base_path, "pyabsa", "datasets", "test.json"),
+        # os.path.join(base_path, "datasets", "test.json"),
+        os.path.join(base_path, "pyabsa", "datasets_v1", "test.json"),
     )
 
     if not train_file:
